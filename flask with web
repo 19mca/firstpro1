@@ -1,0 +1,44 @@
+from flask import Flask, request, render_template
+import firebase_admin
+from firebase_admin import credentials, storage
+
+# Initialize Flask app
+app = Flask(__name__)
+
+# Initialize Firebase
+cred = credentials.Certificate("/content/drive/MyDrive/irula-project-firebase-adminsdk-q9jvb-6657db46c6.json")
+firebase_admin.initialize_app(cred, {'storageBucket': 'irula-project.appspot.com'},name='my-app')
+
+# Retrieve meaning from Firebase Cloud Storage
+def retrieve_meaning_from_firebase(audio_filename):
+    bucket = storage.bucket()
+    blob = bucket.blob(audio_filename)
+    meaning = blob.download_as_string().decode("utf-8")
+    return meaning
+
+# Define route for the home page
+@app.route('/')
+def home():
+    return render_template('index.html')
+
+# Define route for handling form submission
+@app.route('/process_audio', methods=['POST'])
+def process_audio():
+    if 'audio_file' not in request.files:
+        return "No audio file provided"
+
+    audio_file = request.files['audio_file']
+    if audio_file.filename == '':
+        return "No selected file"
+
+    # Save the audio file temporarily
+    audio_filename = '/content/drive/MyDrive/Data/rapoduoutput.wav'
+    audio_file.save(audio_filename)
+
+    # Retrieve English meaning from Firebase
+    english_meaning = retrieve_meaning_from_firebase(audio_filename)
+
+    # Render template with result
+    return render_template('result.html', meaning=english_meaning)
+if __name__ == '__main__':
+    app.run(debug=True, port=4000
