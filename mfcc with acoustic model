@@ -1,0 +1,35 @@
+import librosa
+import numpy as np
+
+def extract_mfccs(audio_paths, num_mfcc=13, n_fft=2048, hop_length=512, max_frames=None):
+    all_mfccs = []
+    for audio_path in audio_paths:
+        audio, sr = librosa.load(audio_path, sr=None)  # Corrected audio_path
+        mfccs = librosa.feature.mfcc(y=audio, sr=sr, n_mfcc=num_mfcc, n_fft=n_fft, hop_length=hop_length)
+        if max_frames is not None:
+            if mfccs.shape[1] < max_frames:
+                mfccs = np.pad(mfccs, ((0, 0), (0, max_frames - mfccs.shape[1])), mode='constant')
+            elif mfccs.shape[1] > max_frames:
+                mfccs = mfccs[:, :max_frames]
+        all_mfccs.append(mfccs)  # Moved outside the if condition
+
+    return all_mfccs
+
+# Example usage with multiple audio files
+audio_paths = ["/content/drive/MyDrive/Data/zip/baoutput.wav",
+               "/content/drive/MyDrive/Data/zip/betaop.wav",
+               "/content/drive/MyDrive/Data/zip/kanoutput.wav",
+               "/content/drive/MyDrive/Data/zip/kudioutput.wav",
+               "/content/drive/MyDrive/Data/zip/niruop.wav",
+               "/content/drive/MyDrive/Data/zip/nioutput.wav",
+               "/content/drive/MyDrive/Data/zip/navuoutput.wav"]
+
+# Set the maximum number of frames (adjust as needed)
+max_frames = 200
+
+mfccs_list = extract_mfccs(audio_paths, max_frames=max_frames)
+
+# Print shape of extracted MFCCs for each audio file
+for i, mfccs in enumerate(mfccs_list):
+    print("MFCCs shape for audio file {}: {}".format(i+1, mfccs.shape))
+    np.savetxt('mfccs{}.csv'.format(i+1), mfccs, delimiter=',')
