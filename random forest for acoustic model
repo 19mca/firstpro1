@@ -1,0 +1,178 @@
+import librosa
+import numpy as np
+
+def extract_mfccs(audio_paths, num_mfcc=13, n_fft=2048, hop_length=512, max_frames=None):
+    all_mfccs = []
+    for i, audio_path in enumerate(audio_paths, 1):
+        # Load audio file
+        audio, sr = librosa.load(audio_path, sr=None)
+
+        # Extract MFCCs
+        mfccs = librosa.feature.mfcc(y=audio, sr=sr, n_mfcc=num_mfcc, n_fft=n_fft, hop_length=hop_length)
+
+        # Truncate or pad MFCCs to ensure consistent number of frames
+        if max_frames is not None:
+            if mfccs.shape[1] < max_frames:
+                mfccs = np.pad(mfccs, ((0, 0), (0, max_frames - mfccs.shape[1])), mode='constant')
+            elif mfccs.shape[1] > max_frames:
+                mfccs = mfccs[:, :max_frames]
+
+        # Append to the list of MFCCs
+        all_mfccs.append(mfccs)
+
+        # Save MFCCs to CSV file with padded index
+        np.savetxt(f'sample_data/mfcc{i:03}.csv', mfccs, delimiter=',')
+
+    return all_mfccs
+
+# Example usage with multiple audio files
+audio_paths = [
+     "/content/drive/MyDrive/Data/baraveoutput.wav",
+    "/content/drive/MyDrive/Data/bodeoutput.wav",
+    "/content/drive/MyDrive/Data/cevioutputp.wav",
+    "/content/drive/MyDrive/Data/cuduoutput.wav",
+    "/content/drive/MyDrive/Data/danioutput.wav",
+    "/content/drive/MyDrive/Data/eleoutput.wav",
+    "/content/drive/MyDrive/Data/elumbuoutput.wav",
+    "/content/drive/MyDrive/Data/ereoutput.wav",
+    "/content/drive/MyDrive/Data/iraluoutput.wav",
+    "/content/drive/MyDrive/Data/kaduoutput.wav",
+    "/content/drive/MyDrive/Data/kanuoutput.wav",
+    "/content/drive/MyDrive/Data/maraoutput.wav",
+    "/content/drive/MyDrive/Data/meleoutput.wav",
+    "/content/drive/MyDrive/Data/mukoutput.wav",
+    "/content/drive/MyDrive/Data/mulioutput.wav",
+    "/content/drive/MyDrive/Data/munuoutput.wav",
+    "/content/drive/MyDrive/Data/nakuoutput.wav",
+    "/content/drive/MyDrive/Data/nayioutput.wav",
+    "/content/drive/MyDrive/Data/nencoutput.wav",
+    "/content/drive/MyDrive/Data/netaruoutput.wav",
+    "/content/drive/MyDrive/Data/onduoutput.wav",
+    "/content/drive/MyDrive/Data/onuoutput.wav",
+    "/content/drive/MyDrive/Data/paluoutput.wav",
+    "/content/drive/MyDrive/Data/penuoutput.wav",
+    "/content/drive/MyDrive/Data/peruop.wav",
+    "/content/drive/MyDrive/Data/rapoduoutput.wav",
+    "/content/drive/MyDrive/Data/ravuoutput.wav",
+    "/content/drive/MyDrive/Data/toluoutput.wav",
+     "/content/drive/MyDrive/text/aathiaudio/opbettatipidichi.wav",
+     "/content/drive/MyDrive/text/aathiaudio/openakkumulinovuthu.wav",
+     "/content/drive/MyDrive/text/aathiaudio/opmununaikaththuthu.wav",
+     "/content/drive/MyDrive/text/aathiaudio/opnaavukanbetta.wav",
+     "/content/drive/MyDrive/text/aathiaudio/opneeneerukudi.wav",
+     "/content/drive/MyDrive/text/aathiaudio/opninnaperuenna.wav"
+
+]
+
+# Set the maximum number of frames (adjust as needed)
+max_frames = 200
+
+mfccs_list = extract_mfccs(audio_paths, max_frames=max_frames)
+
+# Print shape of extracted MFCCs for each audio file
+for i, mfccs in enumerate(mfccs_list):
+    print("MFCCs shape for audio file {}: {}".format(i+1, mfccs.shape))
+    np.savetxt('mfccs{}.csv'.format(i+1), mfccs, delimiter=',')
+
+!pip install joblib
+import joblib
+import numpy as np
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+
+# Load MFCC features from CSV files
+mfccs1 = np.loadtxt('mfccs1.csv', delimiter=',')
+mfccs2 = np.loadtxt('mfccs2.csv', delimiter=',')
+mfccs3 = np.loadtxt('mfccs3.csv', delimiter=',')
+mfccs4 = np.loadtxt('mfccs4.csv', delimiter=',')
+mfccs5 = np.loadtxt('mfccs5.csv', delimiter=',')
+mfccs6 = np.loadtxt('mfccs6.csv', delimiter=',')
+mfccs7 = np.loadtxt('mfccs7.csv', delimiter=',')
+mfccs8 = np.loadtxt('mfccs8.csv', delimiter=',')
+mfccs9 = np.loadtxt('mfccs9.csv', delimiter=',')
+mfccs10 = np.loadtxt('mfccs10.csv', delimiter=',')
+mfccs11 = np.loadtxt('mfccs11.csv', delimiter=',')
+mfccs12 = np.loadtxt('mfccs12.csv', delimiter=',')
+mfccs13 = np.loadtxt('mfccs13.csv', delimiter=',')
+mfccs14 = np.loadtxt('mfccs14.csv', delimiter=',')
+mfccs15 = np.loadtxt('mfccs15.csv', delimiter=',')
+mfccs16 = np.loadtxt('mfccs16.csv', delimiter=',')
+mfccs17 = np.loadtxt('mfccs17.csv', delimiter=',')
+mfccs18 = np.loadtxt('mfccs18.csv', delimiter=',')
+mfccs19 = np.loadtxt('mfccs19.csv', delimiter=',')
+mfccs20 = np.loadtxt('mfccs20.csv', delimiter=',')
+mfccs21 = np.loadtxt('mfccs21.csv', delimiter=',')
+mfccs22 = np.loadtxt('mfccs22.csv', delimiter=',')
+mfccs23 = np.loadtxt('mfccs23.csv', delimiter=',')
+mfccs24 = np.loadtxt('mfccs24.csv', delimiter=',')
+mfccs25 = np.loadtxt('mfccs25.csv', delimiter=',')
+mfccs26 = np.loadtxt('mfccs26.csv', delimiter=',')
+mfccs27 = np.loadtxt('mfccs27.csv', delimiter=',')
+mfccs28 = np.loadtxt('mfccs28.csv', delimiter=',')
+mfccs29 = np.loadtxt('mfccs29.csv', delimiter=',')
+mfccs30 = np.loadtxt('mfccs30.csv', delimiter=',')
+mfccs31 = np.loadtxt('mfccs31.csv', delimiter=',')
+mfccs32 = np.loadtxt('mfccs32.csv', delimiter=',')
+mfccs33 = np.loadtxt('mfccs33.csv', delimiter=',')
+mfccs34 = np.loadtxt('mfccs34.csv', delimiter=',')
+
+# Concatenate MFCC features from all audio files
+X = np.vstack([mfccs1, mfccs2, mfccs3, mfccs4, mfccs5, mfccs6, mfccs7, mfccs8, mfccs9, mfccs10,
+               mfccs11, mfccs12, mfccs13, mfccs14, mfccs15, mfccs16, mfccs17, mfccs18, mfccs19,
+               mfccs20, mfccs21, mfccs22, mfccs23, mfccs24, mfccs25, mfccs26, mfccs27, mfccs28,
+               mfccs29, mfccs30, mfccs31, mfccs32, mfccs33, mfccs34])
+
+# Prepare target labels (phonetic transcriptions)
+y = np.array(['COME'] * mfccs1.shape[0] + ['BONE'] * mfccs2.shape[0] + ['EAR'] * mfccs3.shape[0] + ['LIVER'] * mfccs4.shape[0] + ['WATER'] * mfccs5.shape[0] +
+             ['LEAF'] * mfccs6.shape[0] + ['BONE'] * mfccs7.shape[0] + ['STONE'] * mfccs8.shape[0] + ['LIVER'] * mfccs9.shape[0] + ['EAR'] * mfccs10.shape[0] +
+             ['EYE'] * mfccs11.shape[0] + ['TREE'] * mfccs12.shape[0] + ['MOUNTAIN'] * mfccs13.shape[0] + ['NOSE'] * mfccs14.shape[0] + ['KNEE'] * mfccs15.shape[0] +
+             ['TWO'] * mfccs16.shape[0] + ['TONGUE'] * mfccs17.shape[0] + ['DOG'] * mfccs18.shape[0] + ['BREAST'] * mfccs19.shape[0] + ['BLOOD'] * mfccs20.shape[0] +
+             ['ONE'] * mfccs21.shape[0] + ['ONE'] * mfccs22.shape[0] + ['TOOTH'] * mfccs23.shape[0] + ['LOUSE'] * mfccs24.shape[0] + ['NAME'] * mfccs25.shape[0] +
+             ['NIGHT'] * mfccs26.shape[0] + ['NIGHT'] * mfccs27.shape[0] + ['SKIN'] * mfccs28.shape[0]+ ['the mountain caught fire'] * mfccs29.shape[0]+
+            ['my knee hurts'] * mfccs30.shape[0]+['two dogs barked'] * mfccs31.shape[0]+ ['we saw the mountain'] * mfccs32.shape[0]+ ['you drink water'] * mfccs33.shape[0]+
+             ['what is your name'] * mfccs34.shape[0])
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+# Initialize the Random Forest classifier
+clf = RandomForestClassifier(n_estimators=200, random_state=20)
+
+# Train the classifier
+clf.fit(X_train, y_train)
+
+# Save the model to a file
+joblib.dump(clf, 'random_forest_model.pkl')
+
+# Train the classifier
+clf.fit(X_train, y_train)
+
+# Predict on the test set
+y_pred = clf.predict(X_test)
+
+# Calculate accuracy
+accuracy = accuracy_score(y_test, y_pred)
+print("Accuracy:", accuracy)
+
+
+# Load the new audio and extract MFCC features
+new_audio_path = "/content/drive/MyDrive/Data/baraveoutput.wav"
+new_mfccs = extract_mfccs([new_audio_path], max_frames=200)
+
+# Verify the shape of the extracted MFCC features
+print("Shape of new MFCCs:", new_mfccs[0].shape)
+
+# Predict the phonetic transcription using the trained model
+predicted_transcription = clf.predict(new_mfccs[0])
+
+print("Predicted transcription:", predicted_transcription)
+
+from collections import Counter
+
+# Count occurrences of each transcription
+transcription_counter = Counter(predicted_transcription)
+
+# Find the most common transcription
+most_common_transcription = transcription_counter.most_common(1)[0][0]
+
+print("Most common transcription:", most_common_transcription)
